@@ -94,6 +94,7 @@ export class Quiz extends React.Component<IProps, IState> {
     render() {
         const { attempts, score, step, chosenOption, answerOptions } = this.state;
         const { options, steps } = this.props;
+        const canGoNext: boolean = this.isSolved();
         if (step > steps.length - 1) {
             return [
                     <Header score={score} currentStep={step} steps={steps} />,
@@ -101,18 +102,7 @@ export class Quiz extends React.Component<IProps, IState> {
              ];
         }
         const stepObj: IStep = steps[step];
-        if (!stepObj) {
-            throw new Error('There is no such step...')
-        }
         const question = options.find(({ id }: ITrack): boolean => id === stepObj.answerId);
-
-        if (!question) {
-            throw new Error('There is no such question...')
-        }
-
-        const canGoNext: boolean = this.isSolved();
-
-        console.log('chosenOption', { chosenOption, attempts });
 
         return (
             <>

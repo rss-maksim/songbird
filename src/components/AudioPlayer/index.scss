@@ -10,6 +10,7 @@
 
   .rhap_container {
     height: 45px;
+    min-width: 280px;
     flex-direction: row-reverse;
     background-color: transparent;
     box-shadow: none;
@@ -51,5 +52,17 @@
 
   .rhap_progress-container .rhap_progress-bar {
     height: 4px;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 920px) {
+    .rhap_container {
+      min-width: 200px;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .rhap_container {
+      min-width: 240px;
+    }
   }
 }
