@@ -1,10 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
 import shuffle from 'shuffle-array';
+import { last } from 'ramda';
 
 import { IStep, ITrack } from '../../models'
-import { AnswerCard, AnswerOptions, Button, Question, Header } from '../';
-import { IAttempt } from '../common';
+import { AnswerCard, AnswerOptions, Button, Congrats, Question, Header } from '../';
+import { IAttempt, IAttemptObj } from '../common';
 
 import './index.scss'
 
@@ -17,17 +18,24 @@ interface IState {
     step: number
     score: number
     chosenOption: ITrack
-    attempts: IAttempt
+    attempts: IAttempt[]
     answer?: ITrack
     answerOptions?: ITrack[]
 }
 
+const MAX_ATTEMPTS = 6;
+const MAX_SCORE = 5 * 6;
+
+const defaultState = {
+    step: 0,
+    score: 0,
+    chosenOption: null,
+    attempts: [],
+};
+
 export class Quiz extends React.Component<IProps, IState> {
     state = {
-        step: 0,
-        score: 0,
-        chosenOption: null,
-        attempts: {},
+        ...defaultState,
         answerOptions: []
     };
 
@@ -41,13 +49,29 @@ export class Quiz extends React.Component<IProps, IState> {
         console.log(prevState.attempts);
     }
 
+    updateScore = () => {
+        const lastAttempt: IAttempt = last(this.state.attempts);
+        if (lastAttempt.isCorrect) {
+            this.setState(({ attempts, score }: IState) => ({
+                score: score + (MAX_ATTEMPTS - attempts.length)
+            }));
+        }
+    };
+
     onHandleSelect = (question: ITrack) => () => {
         const { steps } = this.props;
-        const { step } = this.state;
+        const { attempts, step } = this.state;
         const isCorrect = steps[step].answerId === question.id;
-        this.setState(({ attempts }: IState) => ({
+        if (attempts.length >= MAX_ATTEMPTS) {
+            return;
+        }
+
+        const shouldBeAdded: boolean = !attempts.some(({ id }: IAttempt) => question.id === id);
+        const updatedAttempts = shouldBeAdded ? [ ...attempts, { id: question.id, isCorrect }] : attempts;
+        this.setState(() => ({
             chosenOption: question,
-            attempts: { ...attempts, [question.id]: isCorrect } }));
+            attempts: updatedAttempts,
+        }), this.updateScore);
     };
 
     onHandleNext = () => {
@@ -55,19 +79,26 @@ export class Quiz extends React.Component<IProps, IState> {
         if (isSolved) {
             this.setState(({ step }: IState) => ({
                 chosenOption: null,
-                attempts: {},
+                attempts: [],
                 step: step + 1
             }));
         }
     };
 
-    isSolved = (): boolean => Object.values(this.state.attempts).some((isCorrect) => Boolean(isCorrect));
+    onRepeatHandle = () => this.setState({ ...defaultState });
+
+    isSolved = (): boolean => this.state.attempts.some(({ isCorrect }) => isCorrect);
+
+    transformAttempts = (attempts: IAttempt[]): IAttemptObj => attempts.reduce((acc, attempt) => ({ ...acc, [attempt.id]: attempt.isCorrect }), {})
 
     render() {
         const { attempts, score, step, chosenOption, answerOptions } = this.state;
         const { options, steps } = this.props;
-        if (step === steps.length - 1) {
-            return <div>The end</div>
+        if (step > steps.length - 1) {
+            return [
+                    <Header score={score} currentStep={step} steps={steps} />,
+                    <Congrats score={score} maxScore={MAX_SCORE} onRepeat={this.onRepeatHandle} />
+             ];
         }
         const stepObj: IStep = steps[step];
         if (!stepObj) {
@@ -88,7 +119,7 @@ export class Quiz extends React.Component<IProps, IState> {
               <Header score={score} currentStep={step} steps={steps} />
               <Question question={question} solved={canGoNext} />
               <div className="answers-container">
-                  <AnswerOptions answers={answerOptions} attempts={attempts} onSelect={this.onHandleSelect}/>
+                  <AnswerOptions answers={answerOptions} attempts={this.transformAttempts(attempts)} onSelect={this.onHandleSelect}/>
                   <AnswerCard answer={chosenOption} solved={canGoNext} />
               </div>
               <Button className={cn('', {'next-button': canGoNext})} onClick={this.onHandleNext}>Next Level</Button>

@@ -1,0 +1,37 @@
+@import '../../../styles/colors';
+
+.congrats {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 50px 20px;
+  box-sizing: border-box;
+  background-color: $mine-shaft-color;
+
+  .congrats-header {
+    margin: 20px 0;
+    font-size: 38px;
+  }
+
+  .congrats-body {
+    font-size: 18px;
+  }
+
+  .congrats-button {
+    width: 100%;
+    padding: 15px;
+    height: 50px;
+    line-height: 21px;
+    margin: 80px 0 0 0;
+    background-color: $green-color;
+  }
+
+  .congrats-game-over {
+    font-size: 18px;
+    margin-top: 15px;
+    line-height: 30px;
+    color: $green-color;
+    text-align: center;
+  }
+}

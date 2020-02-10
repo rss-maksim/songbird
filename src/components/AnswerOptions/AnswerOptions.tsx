@@ -2,14 +2,14 @@ import React from 'react';
 import cn from 'classnames';
 
 import {ITrack} from '../../models';
-import { IAttempt } from '../common';
+import { IAttemptObj } from '../common';
 
 import './index.scss';
 
 interface IProps {
     answers: ITrack[]
     onSelect: (track: ITrack) => () => void
-    attempts: IAttempt
+    attempts: IAttemptObj
 }
 
 export const AnswerOptions = ({ answers, attempts, onSelect }: IProps) => (
