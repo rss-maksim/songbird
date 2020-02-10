@@ -1,0 +1,12 @@
+@import '../../../../../styles/fonts';
+
+.logo-wrapper {
+  height: 30px;
+
+  a {
+    font-family: $dancing-font-family;
+    font-size: 32px;
+    color: #31d0d0;
+    text-decoration: none;
+  }
+}

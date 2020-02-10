@@ -1,0 +1,46 @@
+@import '../../../styles/colors';
+
+.answers-container {
+  margin-top: 30px;
+  display: flex;
+  min-height: 330px;
+  background-color: $mine-shaft-color;
+
+  .answer-options {
+    flex: 1;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .answer-option {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: $mine-shaft-color;
+    border: 1px solid $tundora-color;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $tundora-color;
+    }
+  }
+
+  .answer-option-btn {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: $tundora-color;
+
+    &.correct {
+      background-color: $green-color;
+    }
+    &.wrong {
+      background-color: $thunderbird;
+    }
+  }
+
+  .answer-option-name {
+    margin-left: 20px;
+  }
+}
