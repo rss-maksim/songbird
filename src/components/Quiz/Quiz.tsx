@@ -44,11 +44,6 @@ export class Quiz extends React.Component<IProps, IState> {
         this.setState({ answerOptions });
     }
 
-    componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
-        console.log(this.state.attempts);
-        console.log(prevState.attempts);
-    }
-
     updateScore = () => {
         const lastAttempt: IAttempt = last(this.state.attempts);
         if (lastAttempt.isCorrect) {
@@ -89,7 +84,7 @@ export class Quiz extends React.Component<IProps, IState> {
 
     isSolved = (): boolean => this.state.attempts.some(({ isCorrect }) => isCorrect);
 
-    transformAttempts = (attempts: IAttempt[]): IAttemptObj => attempts.reduce((acc, attempt) => ({ ...acc, [attempt.id]: attempt.isCorrect }), {})
+    transformAttempts = (attempts: IAttempt[]): IAttemptObj => attempts.reduce((acc, attempt) => ({ ...acc, [attempt.id]: attempt.isCorrect }), {});
 
     render() {
         const { attempts, score, step, chosenOption, answerOptions } = this.state;
