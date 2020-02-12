@@ -24,7 +24,7 @@ interface IState {
 }
 
 const MAX_ATTEMPTS = 6;
-const MAX_SCORE = 5 * 6;
+const MAX_SCORE = 5 * MAX_ATTEMPTS;
 
 const defaultState = {
     step: 0,

@@ -2,11 +2,9 @@ import React, { ReactElement } from 'react';
 
 import { Quiz } from '../'
 import { tracks } from '../../const';
-import {IStep} from '../../models';
+import { IStep } from '../../models';
 
 import './index.scss';
-
-// score
 
 const steps: IStep[] = [
     { name: 'Queen #1', answerId: 1 },
